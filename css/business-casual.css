@@ -90,6 +90,14 @@ p {
   font-weight: 800;
 }
 
+#imgHome{
+  background-position: 0px -60px; 
+  background-image: url('../img/foto_home.png'); 
+  background-size: cover; 
+  margin: 0; 
+  padding: 0
+}
+
 #mainNav .navbar-nav .nav-item.active .nav-link {
   color: #a87400;
 }
