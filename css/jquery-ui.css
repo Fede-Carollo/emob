@@ -910,7 +910,7 @@ body .ui-tooltip {
 }
 .ui-widget-header {
 	border: 1px solid #dddddd;
-	background: #e9e9e9;
+	background: /*#e9e9e9*/#e6a756;
 	color: #333333;
 	font-weight: bold;
 }
@@ -1003,7 +1003,7 @@ a.ui-button:active,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
 	border: 1px solid #dad55e;
-	background: #fffa90;
+	background: /*#fffa90*/#e6a756;
 	color: #777620;
 }
 .ui-state-checked {

@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $("#datepicker").on("click",function(){
-        $(this).datepicker();
+        $("#datepicker").datepicker();
     });
     let buttons = $("#modalAccedi .modal-body button");
     buttons.on("click",function(){
