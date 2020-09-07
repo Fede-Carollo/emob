@@ -1,8 +1,20 @@
 $(document).ready(function(){
-    let buttons = $("#modalAccedi.modal-body button");
+    $("#datepicker").on("click",function(){
+        $(this).datepicker();
+    });
+    let buttons = $("#modalAccedi .modal-body button");
     buttons.on("click",function(){
-        buttons.each(function(index){
-            console.log($(this).html());
-        });
+        //$("#modalAccedi .modal-body .container").empty();
+        if($(this).html() == "Accedi")
+        {
+            //GeneraAccedi();
+        }
+        else
+        {
+            GeneraRegister();
+        }
+    });
+    $("#btnAccedi").on("click", function(){
+        //$(buttons).eq(0).click();
     });
 });
