@@ -1,3 +1,7 @@
 button.selected{
     background-color: #EA9600;
 }
+
+#datepicker{
+    background-color: inherit;
+}
