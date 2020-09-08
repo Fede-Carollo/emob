@@ -5,3 +5,13 @@ button.selected{
 #datepicker{
     background-color: inherit;
 }
+
+a#btnAccedi.user-logged{
+    background-color : white;
+    color : black;
+    border-radius: 60%;
+    width: 40px;
+    height: 40px;
+    line-height: 25px;
+    font-size: 1.2rem;
+}

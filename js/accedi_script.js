@@ -16,11 +16,13 @@ function send_request(url,method,parameters,callback){
 	});
 }
 
-let user = null;
+let user = { name : "Fede", surname: "Carollo"};
 let nowSelected = "";
+let logged = true;
 
 $(document).ready(function()
 {
+    ModalitàAccesso();
     let buttons = $("#modalAccedi .modal-body button");
     buttons.on("click",function(){
         console.log(nowSelected.toString());
@@ -42,11 +44,23 @@ $(document).ready(function()
         }
     });
     $("#btnAccedi").on("click", function(){
-        $(buttons).eq(0).click();
-        setTimeout(function(){
-            $(buttons).eq(0).focus();
-        },501);
-        nowSelected = "Accedi";
+        if(logged)
+        {
+            $(buttons).hide();
+            $("#modalAccedi .modal-header h5").text("Accesso come " + user.surname + " " + user.name);
+            $("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
+            $("#btnAccediModal").text("Logout");
+        }
+        else
+        {
+            $(buttons).show();
+            $(buttons).eq(0).click();
+            setTimeout(function(){
+                $(buttons).eq(0).focus();
+            },501);
+            nowSelected = "Accedi";
+        }
+        
         
     });
     $("#btnAccediModal").on("click", function(){
@@ -100,10 +114,9 @@ function Accedi()
 }
 
 function AccessResponse(responseText){
-    alert(responseText);
     user = JSON.parse(responseText);
+    ModalitàAccesso();
     console.log(json.success);
-    
 }
 
 
@@ -212,5 +225,23 @@ function RegisterResponse(responseText){
     }
 }
 function loginResponse(responseText){
-    alert(responseText);
+    if(responseText == "1")
+    {
+        let parameters = {
+            email: $("#txtEmail").val(),
+            password: $("#txtPassword").val()
+        }
+        send_request("php/requestAccess.php", "POST", parameters, AccessResponse);
+    }
+    else
+        console.log(responseText);
+}
+
+function ModalitàAccesso(){ //login eseguito
+    $("#btnAccedi").text(user.surname.trim().charAt(0) + user.name.trim().charAt(0));
+    $("#btnAccedi").addClass("user-logged").css({"color": "black"});
+    $("#btnAccedi").unbind();
+    $("#btnAccedi").click(function(){
+
+    });
 }
