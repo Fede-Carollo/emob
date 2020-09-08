@@ -1,6 +1,6 @@
 "use strict";
 
-function send_request(url,method,parameters,callback){
+function send_request(url,method,parameters,callback){  //chiamata ajax generica
 	//alert(parameters);
 	$.ajax({
 		url: url, //default: currentPage
@@ -16,14 +16,33 @@ function send_request(url,method,parameters,callback){
 	});
 }
 
-let user = { name : "Fede", surname: "Carollo"};
+let user = {};
 let nowSelected = "";
-let logged = true;
+let logged = false;
+let buttons;
 
 $(document).ready(function()
 {
-    ModalitàAccesso();
-    let buttons = $("#modalAccedi .modal-body button");
+    send_request("php/userCookie.php", "POST", null, UserCookie_response);
+    buttons = $("#modalAccedi .modal-body button");
+    DefineBtnAccedi();
+    DefineModalButtonsClick();
+    DefineModalBtnAccedi();
+    
+});
+
+//#region event listeners
+
+function DefineModalBtnAccedi(){
+    $("#btnAccediModal").on("click", function(){
+        if(nowSelected == "Accedi")
+            Accedi();
+        else
+            ControlliValiditaDati();
+    });
+}
+
+function DefineModalButtonsClick(){
     buttons.on("click",function(){
         console.log(nowSelected.toString());
         if(nowSelected != $(this).html())
@@ -43,11 +62,14 @@ $(document).ready(function()
             console.log(nowSelected);
         }
     });
+}
+
+function DefineBtnAccedi(){
     $("#btnAccedi").on("click", function(){
         if(logged)
         {
             $(buttons).hide();
-            $("#modalAccedi .modal-header h5").text("Accesso come " + user.surname + " " + user.name);
+            $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
             $("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
             $("#btnAccediModal").text("Logout");
         }
@@ -63,21 +85,28 @@ $(document).ready(function()
         
         
     });
-    $("#btnAccediModal").on("click", function(){
-        if(nowSelected == "Accedi")
-        {
-            Accedi();
-        }
-        else
-        {
-            ControlliValiditaDati();
-        }
-    });
-});
+}
+//#endregion
 
-function GeneraAccedi()
+function UserCookie_response(responseText)
 {
-    let string = '<div class="form">' + 
+    let json = JSON.parse(responseText);
+    if(json.cookie_existing)
+    {
+        logged = true;
+        $(buttons).hide();
+        user = JSON.parse(JSON.parse(json.data));
+        $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
+        $("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
+        $("#btnAccediModal").text("Logout");
+        ModalitàAccesso();
+    }
+
+}
+
+function GeneraAccedi() //html per accedere
+{
+    let string = '<div class="form">' +
     '<div class="form">' + 
     '<input class="form-control" type="text" placeholder="Email" id="txtEmail">' + 
     '<input class="form-control mt-2" type="password" placeholder="Password" id= "txtPassword">' +
@@ -86,7 +115,7 @@ function GeneraAccedi()
     $("#btnAccediModal").html("Accedi");
 }
 
-function GeneraRegister()
+function GeneraRegister()   //html per iscriversi
 {
     let string =
                 '<div class="form">' + 
@@ -114,7 +143,11 @@ function Accedi()
 }
 
 function AccessResponse(responseText){
-    user = JSON.parse(responseText);
+    let json = JSON.parse(responseText);
+    user = json.user;
+    send_request("php/createCookie.php", "POST",{cookie_name:'user-credentials', cookie_value:JSON.stringify(user)});
+    logged = true;
+    $("#modalAccedi .modal-footer button").eq(1).click();
     ModalitàAccesso();
     console.log(json.success);
 }
@@ -194,7 +227,7 @@ function ControlliValiditaDati()
     send_request("php/verificaDatiRegister.php","POST",parameters, RegisterResponse);
 }
 
-function RegisterResponse(responseText){
+function RegisterResponse(responseText){    //callback controllo regex dati inseriti per iscrizione
     alert(responseText);
     let json = JSON.parse(responseText);
     let alertErrore = $("#alertRegister");
@@ -224,7 +257,7 @@ function RegisterResponse(responseText){
             break;
     }
 }
-function loginResponse(responseText){
+function loginResponse(responseText){   //callback all'esecuzione della registrazione utente
     if(responseText == "1")
     {
         let parameters = {
@@ -238,10 +271,6 @@ function loginResponse(responseText){
 }
 
 function ModalitàAccesso(){ //login eseguito
-    $("#btnAccedi").text(user.surname.trim().charAt(0) + user.name.trim().charAt(0));
+    $("#btnAccedi").text(user.cognome.trim().charAt(0) + user.nome.trim().charAt(0));
     $("#btnAccedi").addClass("user-logged").css({"color": "black"});
-    $("#btnAccedi").unbind();
-    $("#btnAccedi").click(function(){
-
-    });
 }

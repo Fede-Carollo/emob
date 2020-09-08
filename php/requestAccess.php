@@ -11,6 +11,7 @@
     $passwd = $_POST["password"];
     $sql = "SELECT * FROM users WHERE passwd = '".$passwd."' AND email = '".$email."'";
     $result = mysqli_query($mysqli, $sql);
+    $json;
     if(mysqli_num_rows($result) == 0)
         $vect['success'] = false;
     else
@@ -20,8 +21,9 @@
         {
             $vect['user'] = $record;
         }
+        $json = json_encode($vect);
     }
-    echo(json_encode($vect));
+    echo($json);
     mysqli_close($mysqli);
     
 ?>
