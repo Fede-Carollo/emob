@@ -97,10 +97,16 @@ function UserCookie_response(responseText)
         $(buttons).hide();
         user = JSON.parse(JSON.parse(json.data));
         $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
-        $("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
+        $("#modalAccedi .modal-body").text("Eventi disponibili: ");
+        //TODO eventi
+        send_request("php/richiediEventi.php", "POST", null, eventiRequest);
         $("#btnAccediModal").text("Logout");
         ModalitàAccesso();
     }
+
+}
+
+function eventiRequest(responseText){
 
 }
 

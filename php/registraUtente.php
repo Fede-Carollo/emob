@@ -1,4 +1,5 @@
 <?php
+if(isset($_SESSION))
     $host = "localhost";
     $user = "root";
     $dbName = "vallauri_eventi";

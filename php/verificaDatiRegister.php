@@ -1,4 +1,6 @@
 <?php
+if(!isset($_SESSION["sessione"]))
+    die("Non puoi accedere a questa pagina");
 $vect = [];
 $email = $_POST['email'];
 $password = $_POST["password"];

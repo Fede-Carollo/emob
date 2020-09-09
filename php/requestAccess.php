@@ -1,4 +1,5 @@
 <?php
+if(!isset($_SESSION["counter"]))
     $vect = [];
     $host = "localhost";
     $user = "root";
