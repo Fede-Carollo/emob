@@ -70,7 +70,7 @@ function DefineBtnAccedi(){
         {
             $(buttons).hide();
             $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
-            $("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
+            //$("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
             $("#btnAccediModal").text("Logout");
         }
         else
@@ -97,7 +97,7 @@ function UserCookie_response(responseText)
         $(buttons).hide();
         user = JSON.parse(JSON.parse(json.data));
         $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
-        $("#modalAccedi .modal-body").text("Eventi disponibili: ");
+        $("#modalAccedi .modal-body").append("<div class='container events-container'></div>");
         //TODO eventi
         send_request("php/richiediEventi.php", "POST", null, eventiRequest);
         $("#btnAccediModal").text("Logout");
@@ -107,6 +107,36 @@ function UserCookie_response(responseText)
 }
 
 function eventiRequest(responseText){
+    let json = JSON.parse(responseText);
+    if(json.success)
+    {
+        for(let evento of json.events)
+        {
+            let expired = evento.num_attuale_partecipanti == evento.num_max_partecipanti;
+            let row = $("<div class='d-flex flex-row bd-highlight mb-3 evento rounded "+ (expired? "bg-danger": "bg-success") +"'></div>");
+            row.append('<div class="align-middle p-2 bd-highlight col-lg-3">'+ evento.nome_evento +'</div>');
+            row.append('<div class="align-middle p-2 bd-highlight col-lg-2">Il '+ evento.data +'</div>');
+            row.append('<div class="align-middle p-2 bd-highlight col-lg-2">Ore '+ evento.ora +'</div>');
+            row.append('<div class="align-middle p-2 bd-highlight col-lg-2">Partecipanti: '+ evento.num_attuale_partecipanti + "/"+ evento.num_max_partecipanti +'</div>');
+            row.append('<div class="align-middle p-2 bd-highlight col-lg-2">' + 
+                            '<button id="btnEvento'+ evento.id +'" class="btn btn-primary" name="btnEvento" '+ (expired? "disabled":"") +'>Iscriviti</button>' + 
+                            '</div>');
+            $("#modalAccedi .modal-body .events-container").append(row);
+        }
+        $("button[name = 'btnEvento']").on("click", function(){
+            let parameters = {
+                id_evento : $(this).attr("id").toString().substr($(this).attr("id").toString().lenght-1),
+                email : user.email
+            }
+            send_request("php/eventRegistration.php","POST", parameters, EventRegistrationResponse);
+        });
+    }
+}
+
+function EventRegistrationResponse(){
+
+
+
 
 }
 
@@ -158,7 +188,6 @@ function AccessResponse(responseText){
     console.log(json.success);
 }
 
-
 function ControlliValiditaDati()
 {
     if(!$("#alertRegister").lenght)
@@ -169,7 +198,6 @@ function ControlliValiditaDati()
     let password = $("#txtPassword").val();
     let confermaPass = $("#txtConfermaPass").val();
     let data = $("#datepicker").val();
-    //da fixare
     let alert = $("<div id='alertRegister' role='alert'></div>").addClass("alert alert-danger mt-2")
                                                                 .append("<span id='alertText'></span>")
                                                                 .append('<button type="button" class="close" data-dismiss="alert" aria-label="Close">' +

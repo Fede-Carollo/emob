@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $_SESSION["sessione"] = 1;
+    $_SESSION["sessione"] = true;
     $vect =[];
     if(isset($_COOKIE["user-credentials"]))
     {
