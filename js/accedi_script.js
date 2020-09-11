@@ -32,7 +32,7 @@ $(document).ready(function()
         setTimeout(function(){
             $("#modalAccedi").modal();
             sessionStorage.setItem("open-modal", false);
-        }, 5000);
+        }, 1000);
         
     }
         
@@ -310,6 +310,7 @@ function ControlliValiditaDati()
 }
 
 function RegisterResponse(responseText){    //callback controllo regex dati inseriti per iscrizione
+    
     let json = JSON.parse(responseText);
     let alertErrore = $("#alertRegister");
     switch(json.result)
