@@ -1,7 +1,6 @@
 "use strict";
 
-function send_request(url,method,parameters,callback){  //chiamata ajax generica
-	//alert(parameters);
+function send_request(url,method,parameters,callback){  //chiamata ajax generica;
 	$.ajax({
 		url: url, //default: currentPage
 		type: method,
@@ -99,7 +98,7 @@ function UserCookie_response(responseText)
         $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
         $("#modalAccedi .modal-body").append("<div class='container events-container'></div>");
         //TODO eventi
-        send_request("php/richiediEventi.php", "POST", null, eventiRequest);
+        send_request("php/richiediEventi.php", "POST", { email: user.email}, eventiRequest);
         $("#btnAccediModal").text("Logout");
         ModalitàAccesso();
     }
@@ -107,6 +106,7 @@ function UserCookie_response(responseText)
 }
 
 function eventiRequest(responseText){
+    alert(responseText);
     let json = JSON.parse(responseText);
     if(json.success)
     {
@@ -119,25 +119,59 @@ function eventiRequest(responseText){
             row.append('<div class="align-middle p-2 bd-highlight col-lg-2">Ore '+ evento.ora +'</div>');
             row.append('<div class="align-middle p-2 bd-highlight col-lg-2">Partecipanti: '+ evento.num_attuale_partecipanti + "/"+ evento.num_max_partecipanti +'</div>');
             row.append('<div class="align-middle p-2 bd-highlight col-lg-2">' + 
-                            '<button id="btnEvento'+ evento.id +'" class="btn btn-primary" name="btnEvento" '+ (expired? "disabled":"") +'>Iscriviti</button>' + 
+                            '<button id="btnEvento'+ evento.id +'" class="btn btn-primary btn-evento"  '+ (expired? "disabled":"") +'>Iscriviti</button>' + 
                             '</div>');
             $("#modalAccedi .modal-body .events-container").append(row);
         }
-        $("button[name = 'btnEvento']").on("click", function(){
+        $("button.btn-evento").each(function( index ){
+            //eventi registrati passa l'id evento
+            //per ogni ciclo controllare se esiste all'interno di eventi_registrati quel numero
+            for(let evento_registrato of json.eventi_registrati)
+            {
+                if(evento_registrato.id_evento == (index +1))
+                {
+                    $(this).attr("id", "btnUnrollEvento" + index)
+                    .removeClass("btn-evento")
+                    .addClass("btn-unroll-evento")
+                    .attr("disabled", false)
+                    .text("Disiscriviti")
+                    .css({"font-size" : "0.9rem", "width": "82px", "height": "38px"})
+                    .removeClass("p-2")
+                    .addClass("p-1");
+                    break;
+                }
+            }
+        });
+        $("button.btn-evento").on("click", function(){
             let parameters = {
-                id_evento : $(this).attr("id").toString().substr($(this).attr("id").toString().lenght-1),
+                id_evento : $(this).prop("id").substr(9),
                 email : user.email
             }
             send_request("php/eventRegistration.php","POST", parameters, EventRegistrationResponse);
         });
+        //non funiiona
+        $("button.btn-unroll-evento").on("click", function(){
+            
+            let parameters = {
+                id_evento : parseInt($(this).prop("id").substr(15))+1,
+                email : user.email
+            }
+            send_request("php/eventUnroll.php","POST", parameters, EventDisiscrivitiResponse);
+        });
     }
 }
 
-function EventRegistrationResponse(){
+function EventDisiscrivitiResponse(responseText){
+    $(".events-container").empty();
+    send_request("php/richiediEventi.php", "POST", {email : user.email}, eventiRequest);
+}
 
-
-
-
+function EventRegistrationResponse(responseText){
+    if(responseText)
+    {
+        $(".events-container").empty();
+        send_request("php/richiediEventi.php", "POST", {email : user.email}, eventiRequest);
+    }
 }
 
 function GeneraAccedi() //html per accedere
@@ -262,7 +296,6 @@ function ControlliValiditaDati()
 }
 
 function RegisterResponse(responseText){    //callback controllo regex dati inseriti per iscrizione
-    alert(responseText);
     let json = JSON.parse(responseText);
     let alertErrore = $("#alertRegister");
     switch(json.result)

@@ -40,9 +40,8 @@ else
     {
         array_push($eventiRegistrati,$record);
     }
-    $vect["eventi_registrati"] = json_encode($eventiRegistrati);
+    $vect["eventi_registrati"] = $eventiRegistrati;
     $json = json_encode($vect);
-    //TODO eseguire test!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     echo($json);
     mysqli_close($mysqli);
 }

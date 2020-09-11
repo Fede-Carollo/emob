@@ -1,5 +1,6 @@
 <?php
-if(isset($_SESSION))
+session_start();
+if(isset($_SESSION["sessione"]))
     $host = "localhost";
     $user = "root";
     $dbName = "vallauri_eventi";
