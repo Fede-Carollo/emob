@@ -27,7 +27,15 @@ $(document).ready(function()
     DefineBtnAccedi();
     DefineModalButtonsClick();
     DefineModalBtnAccedi();
-    
+    if(sessionStorage.getItem("open-modal"))
+    {
+        setTimeout(function(){
+            $("#modalAccedi").modal();
+            sessionStorage.setItem("open-modal", false);
+        }, 5000);
+        
+    }
+        
 });
 
 //#region event listeners
@@ -90,6 +98,7 @@ function DefineBtnAccedi(){
 //#endregion
 
 function refreshPage(){
+    sessionStorage.setItem('open-modal', true);
     location.reload();
 }
 
@@ -112,7 +121,6 @@ function UserCookie_response(responseText)
 }
 
 function eventiRequest(responseText){
-    alert(responseText);
     let json = JSON.parse(responseText);
     if(json.success)
     {
@@ -221,15 +229,11 @@ function Accedi()
 function AccessResponse(responseText){
     let json = JSON.parse(responseText);
     user = json.user;
-    send_request("php/createCookie.php", "POST",{cookie_name:'user-credentials', cookie_value:JSON.stringify(user)}, callbackCookieCreation);
+    send_request("php/createCookie.php", "POST",{cookie_name:'user-credentials', cookie_value:JSON.stringify(user)}, refreshPage);
     logged = true;
     $("#modalAccedi .modal-footer button").eq(1).click();
     ModalitàAccesso();
     console.log(json.success);
-}
-
-function callbackCookieCreation(responseText){
-    location.reload();
 }
 
 function ControlliValiditaDati()
