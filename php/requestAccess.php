@@ -1,4 +1,5 @@
 <?php
+session_start();
 if(!isset($_SESSION["sessione"]))
     die("Non puoi accedere al webservice");
 $vect = [];

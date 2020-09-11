@@ -70,7 +70,9 @@ function DefineBtnAccedi(){
             $(buttons).hide();
             $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
             //$("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
-            $("#btnAccediModal").text("Logout");
+            $("#btnAccediModal").text("Logout").unbind().on("click",function(){
+                send_request("php/deleteUserCookie.php", "POST", null, refreshPage);
+            })
         }
         else
         {
@@ -87,6 +89,11 @@ function DefineBtnAccedi(){
 }
 //#endregion
 
+function refreshPage(){
+    location.reload();
+}
+
+
 function UserCookie_response(responseText)
 {
     let json = JSON.parse(responseText);
@@ -97,7 +104,6 @@ function UserCookie_response(responseText)
         user = JSON.parse(JSON.parse(json.data));
         $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
         $("#modalAccedi .modal-body").append("<div class='container events-container'></div>");
-        //TODO eventi
         send_request("php/richiediEventi.php", "POST", { email: user.email}, eventiRequest);
         $("#btnAccediModal").text("Logout");
         ModalitàAccesso();
@@ -215,11 +221,15 @@ function Accedi()
 function AccessResponse(responseText){
     let json = JSON.parse(responseText);
     user = json.user;
-    send_request("php/createCookie.php", "POST",{cookie_name:'user-credentials', cookie_value:JSON.stringify(user)});
+    send_request("php/createCookie.php", "POST",{cookie_name:'user-credentials', cookie_value:JSON.stringify(user)}, callbackCookieCreation);
     logged = true;
     $("#modalAccedi .modal-footer button").eq(1).click();
     ModalitàAccesso();
     console.log(json.success);
+}
+
+function callbackCookieCreation(responseText){
+    location.reload();
 }
 
 function ControlliValiditaDati()
