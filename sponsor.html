@@ -21,17 +21,55 @@
 
   <!-- Custom styles for this template -->
   <link href="css/business-casual.css" rel="stylesheet">
+
+  <link href="css/jquery-ui.css" rel="stylesheet">
+  <link href="css/stylesheets.css" rel="stylesheet">
 </head>
 
 <body>
 
-  <h1 class="site-heading text-center text-white d-none d-lg-block">
-    <span class="site-heading-upper text-primary mb-3">Sosteniamo il nostro ambiente!</span>
-    <span class="site-heading-lower"><a target="" href="index.html"><img class="product-item-img mx-auto img-fluid mb-3 mb-lg-0" src="img/logoEm2.png" alt=""></a></span>
-  </h1>
+  <div id="modalResult" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="modalAccedi">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header text-center">
+          <h5 class="modal-title ml-5">Accedi</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid text-center">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-primary w-50">Accedi</button>
+              <button type="button" class="btn btn-primary w-100">Registrati</button>
+            </div>
+          </div>
+          <div class="container rounded mt-3">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="btnAccediModal">Accedi</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="imgHome" class="container-fluid mt-0 mb-0 p-1">
+    <h1 class="site-heading text-center text-white d-none d-lg-block ">
+      <span id="mainScritta" class="site-heading-upper text-primary mb-3">Sosteniamo il nostro ambiente!</span>
+      <span class="site-heading-lower"><a target="" href="index.html"><img class="product-item-img mx-auto img-fluid mb-3 mb-lg-0" src="img/logoEm2.png" alt=""></a></span>
+    </h1>
+  </div>
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
+  <nav class="sticky-top navbar navbar-expand-lg navbar-dark py-lg-4" id="mainNav">
     <div class="container">
       <span class="site-heading-lower navbar-brand d-lg-none"><a target="" href="index.html"><img class="product-item-img mx-auto img-fluid mb-3 mb-lg-0" src="img/logoEm3.png" alt=""></a></span>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,34 +78,32 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="index.html">Home</a>
-          </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="chi_siamo.html">Chi siamo</a>
-          </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="concorso.html">Concorso</a>
-          </li>
-          <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="comunicati_stampa.html">Comunicati stampa</a>
-          </li>
-          <li class="nav-item active dropdown show px-lg-4">
-            <a class="nav-link text-uppercase text-expanded dropdown-toggle" href="#" id="navbarDropdownMenuSponsor" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Sponsor e patrocini
+            <a class="nav-link text-uppercase text-expanded" href="index.html">Home
               <span class="sr-only">(current)</span>
             </a>
-            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="patrocini.html">Patrocini e sostegni</a>
-              <a class="dropdown-item" href="sponsor.html">Sponsor</a>
-            </div>
           </li>
           <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="link_utili.html">Link utili</a>
+            <a class="nav-link text-uppercase text-expanded text-center" href="chi_siamo.html">Chi siamo</a>
           </li>
           <li class="nav-item px-lg-4">
-            <a class="nav-link text-uppercase text-expanded" href="contatti.html">Contatti</a>
+            <a class="nav-link text-uppercase text-expanded text-center" href="concorso.html">Concorso</a>
           </li>
-          <li class="nav-item dropdown show px-lg-4">
+          <li class="nav-item px-lg-1">
+            <a class="nav-link text-uppercase text-expanded text-center" href="comunicati_stampa.html">Comunicati stampa</a>
+          </li>
+          <li class="nav-item px-lg-3">
+            <a class="nav-link text-uppercase text-expanded text-center" href="patrocini.html">Patrocini</a>
+          </li>
+          <li class="nav-item active px-lg-3">
+            <a class="nav-link text-uppercase text-expanded text-center" href="sponsor.html">Sponsor</a>
+          </li>
+          <li class="nav-item px-lg-2">
+            <a class="nav-link text-uppercase text-expanded text-center" href="link_utili.html">Link utili</a>
+          </li>
+          <li class="nav-item px-lg-3">
+            <a class="nav-link text-uppercase text-expanded text-center" href="contatti.html">Contatti</a>
+          </li>
+          <li class="nav-item dropdown show px-lg-2">
             <a class="nav-link text-uppercase text-expanded dropdown-toggle" href="#" id="navbarDropdownMenuEdizioniPrecedenti" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
               Edizioni precedenti
             </a>
@@ -76,6 +112,9 @@
               <a class="dropdown-item" href="edizione2019.html">Edizione 2019</a>
               <a class="dropdown-item" href="edizione2020.html">Edizione 2020</a>
             </div>
+          </li>
+          <li class="nav-item px-lg-4">
+            <a class="nav-link text-uppercase text-expanded text-center" data-toggle="modal" data-target="#modalAccedi" id="btnAccedi">Accedi</a>
           </li>
         </ul>
       </div>
@@ -93,6 +132,9 @@
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/accedi_script.js"></script>
 
 </body>
 

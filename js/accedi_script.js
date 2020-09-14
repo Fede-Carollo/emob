@@ -19,6 +19,7 @@ let user = {};
 let nowSelected = "";
 let logged = false;
 let buttons;
+let nome_evento;
 
 $(document).ready(function()
 {
@@ -31,7 +32,12 @@ $(document).ready(function()
     {
         setTimeout(function(){
             $("#modalAccedi").modal();
-            sessionStorage.setItem("open-modal", false);
+            sessionStorage.removeItem("open-modal");
+            /*setTimeout(function(){
+                $("#modalResult").modal();
+                $("#modalDialog .modal-dialog .modal.content").text("L'iscrizione all'evento " + sessionStorage.getItem("nome-evento") + " è avvenuta con successo");
+                sessionStorage.removeItem("nome-evento");
+            },501);*/   //non funziona
         }, 1000);
         
     }
@@ -77,7 +83,6 @@ function DefineBtnAccedi(){
         {
             $(buttons).hide();
             $("#modalAccedi .modal-header h5").text("Accesso come " + user.cognome + " " + user.nome);
-            //$("#modalAccedi .modal-body").text("Sei iscritto a questi eventi: ");
             $("#btnAccediModal").text("Logout").unbind().on("click",function(){
                 send_request("php/deleteUserCookie.php", "POST", null, refreshPage);
             })
